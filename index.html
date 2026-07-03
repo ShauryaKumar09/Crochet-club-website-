@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #fdf9f7; }
+  @keyframes wcc-float   { 0%,100% { transform: translateY(0) rotate(var(--r,0deg)); } 50% { transform: translateY(-16px) rotate(var(--r,0deg)); } }
+  @keyframes wcc-drift   { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(14px,-22px) rotate(18deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+  @keyframes wcc-wobble  { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+  @keyframes wcc-bounce  { 0%,100% { transform: translateY(0); opacity:.9; } 50% { transform: translateY(10px); opacity:.5; } }
+  @keyframes wcc-spin    { to { transform: rotate(360deg); } }
+  @keyframes wcc-rise    { from { opacity:0; transform: translateY(115%) rotate(3deg); } to { opacity:1; transform: translateY(0) rotate(0deg); } }
+  @keyframes wcc-fadedn  { from { opacity:0; transform: translateY(-14px); } to { opacity:1; transform: translateY(0); } }
+  .wcc-hero-word { display:inline-block; animation: wcc-rise .9s cubic-bezier(.2,.7,.2,1) backwards; }
+  .wcc-link { position:relative; }
+  .wcc-link::after { content:""; position:absolute; left:0; right:100%; bottom:-4px; height:2px; background:currentColor; transition:right .3s ease; }
+  .wcc-link:hover::after { right:0; }
+</style>
+</helmet>
+
+<div ref="{{ root }}" style="font-family:'EB Garamond', Georgia, serif; color:#463f44; overflow-x:hidden;">
+
+  <!-- ===== NAV ===== -->
+  <nav ref="{{ nav }}" style="position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:18px 6vw; transition:background .4s ease, box-shadow .4s ease, padding .4s ease; animation:wcc-fadedn .8s ease both;">
+    <a href="#top" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
+      <img ref="{{ navlogo }}" src="assets/logo.png" alt="" style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.7); transition:border-color .4s ease, box-shadow .4s ease;">
+      <span ref="{{ navname }}" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:22px; letter-spacing:.02em; color:#fff; transition:color .4s ease;">Wayzata Crochet</span>
+    </a>
+    <div ref="{{ navlinks }}" style="display:flex; align-items:center; gap:30px; font-size:18px; color:#fff; transition:color .4s ease;">
+      <a href="#about" class="wcc-link" style="color:inherit; text-decoration:none;">About</a>
+      <a href="#makes" class="wcc-link" style="color:inherit; text-decoration:none;">Our makes</a>
+      <a href="#events" class="wcc-link" style="color:inherit; text-decoration:none;">Events</a>
+      <a href="#donate" class="wcc-link" style="color:inherit; text-decoration:none;">Donate</a>
+      <a href="#contact" class="wcc-link" style="color:inherit; text-decoration:none;">Contact</a>
+      <a href="#join" style="text-decoration:none; padding:9px 24px; background:#8faed8; color:#fff; border-radius:22px; font-size:17px; box-shadow:0 8px 20px -8px rgba(143,174,216,.9); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-2px); box-shadow:0 12px 26px -8px rgba(143,174,216,1);">Join us</a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <header id="top" style="position:relative; height:100vh; min-height:640px; overflow:hidden;">
+    <img ref="{{ heroimg }}" src="assets/plushies.jpeg" alt="A table full of handmade crochet plushies" style="position:absolute; top:-6%; left:0; width:100%; height:118%; object-fit:cover; will-change:transform;">
+    <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(122,144,190,.5) 0%, rgba(150,140,175,.34) 42%, rgba(70,63,68,.72) 100%);"></div>
+
+    <!-- floating decorations -->
+    <div style="position:absolute; top:20%; left:8%; font-size:34px; color:rgba(255,255,255,.85); animation:wcc-drift 9s ease-in-out infinite;">♡</div>
+    <div style="position:absolute; top:32%; right:12%; font-size:22px; color:rgba(251,238,242,.9); animation:wcc-drift 11s ease-in-out infinite .6s;">♡</div>
+    <div style="position:absolute; bottom:26%; left:14%; width:26px; height:26px; border-radius:50%; background:rgba(234,184,198,.55); box-shadow:inset 0 0 0 3px rgba(255,255,255,.35); animation:wcc-drift 13s ease-in-out infinite 1.2s;"></div>
+    <div style="position:absolute; top:24%; right:26%; width:18px; height:18px; border-radius:50%; background:rgba(143,174,216,.5); animation:wcc-float 7s ease-in-out infinite;"></div>
+
+    <div style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 6vw;">
+      <img src="assets/logo.png" alt="Wayzata Crochet Club logo" style="width:150px; height:150px; border-radius:50%; object-fit:cover; box-shadow:0 22px 50px -18px rgba(60,50,80,.7); animation:wcc-float 6s ease-in-out infinite, wcc-fadedn 1s ease both;">
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:clamp(48px,8vw,104px); line-height:.96; color:#fff; margin:26px 0 0; text-shadow:0 6px 30px rgba(60,50,70,.45);">
+        <span class="wcc-hero-word" style="animation-delay:.15s;">Wayzata</span>
+        <span style="display:block;">
+          <span class="wcc-hero-word" style="animation-delay:.3s; color:#f7d7e0;">Crochet</span>
+          <span class="wcc-hero-word" style="animation-delay:.45s;">&nbsp;Club</span>
+        </span>
+      </h1>
+      <p style="font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(19px,2.4vw,26px); color:#fbeef2; margin:24px 0 0; max-width:560px; line-height:1.45; text-shadow:0 2px 14px rgba(60,50,70,.5); animation:wcc-fadedn 1s ease .5s both;">Handmade, cozy, and low-stress for crocheters of every level.</p>
+      <div style="display:flex; gap:16px; margin-top:38px; flex-wrap:wrap; justify-content:center; animation:wcc-fadedn 1s ease .7s both;">
+        <a href="#join" style="text-decoration:none; padding:15px 38px; background:#fff; color:#7f9fce; border-radius:28px; font-size:20px; font-weight:500; box-shadow:0 14px 30px -12px rgba(60,50,80,.5); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-3px) scale(1.02); box-shadow:0 20px 38px -12px rgba(60,50,80,.6);">Join the club</a>
+        <a href="#makes" style="text-decoration:none; padding:15px 34px; background:rgba(255,255,255,.16); color:#fff; border:1.5px solid rgba(255,255,255,.6); border-radius:28px; font-size:20px; backdrop-filter:blur(4px); transition:background .25s ease;" style-hover="background:rgba(255,255,255,.28);">See our makes</a>
+      </div>
+    </div>
+
+    <div style="position:absolute; bottom:70px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,.85); font-size:26px; animation:wcc-bounce 1.8s ease-in-out infinite;">⌄</div>
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" style="position:absolute; bottom:-1px; left:0; width:100%; height:70px; display:block;"><path d="M0,45 C240,12 480,62 720,40 C960,18 1200,58 1440,32 L1440,70 L0,70 Z" fill="#fdf9f7"></path></svg>
+  </header>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" style="padding:40px 6vw 20px; max-width:1000px; margin:0 auto;">
+    <div data-reveal="" style="background:#fff; border-radius:26px; padding:clamp(36px,5vw,64px); box-shadow:0 24px 54px -30px rgba(120,110,140,.55); text-align:center;">
+      <div style="display:inline-block; font-family:'EB Garamond',serif; letter-spacing:.2em; text-transform:uppercase; font-size:14px; color:#dc9aad; margin-bottom:16px;">Why us?</div>
+      <p style="font-family:'Cormorant Garamond',serif; font-size:clamp(26px,3.4vw,38px); line-height:1.35; color:#463f44; margin:0 0 26px; font-weight:500;">Wayzata Crochet strives to create a fun, low-stress, and creative environment for aspiring and expert crocheters!</p>
+      <p style="font-size:clamp(18px,2.2vw,22px); line-height:1.65; color:#6a636a; margin:0 auto; max-width:680px;">Crochet Club welcomes crocheters at all levels, whether you’re just starting or already advanced. We’ll learn the basics of how to crochet together, and you’ll create small projects to enjoy or share with friends and family.</p>
+    </div>
+  </section>
+
+  <!-- ===== MEETING ===== -->
+  <section style="display:flex; justify-content:center; padding:54px 6vw 30px;">
+    <div data-reveal="" style="position:relative; background:#f4e7ec; border:1.5px dashed #e0b3c1; border-radius:22px; padding:30px 52px; text-align:center; animation:wcc-wobble 6s ease-in-out infinite;">
+      <div style="font-family:'EB Garamond',serif; letter-spacing:.18em; text-transform:uppercase; font-size:13px; color:#c7889b; margin-bottom:10px;">When we meet</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(26px,3.4vw,34px); color:#8a5c6c;">Most Fridays after school</div>
+      <div style="font-size:clamp(18px,2.2vw,21px); color:#a07886; margin-top:6px;">3:30 – 4:30 PM &nbsp;·&nbsp; Room C406</div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section id="makes" style="padding:50px 6vw 30px; max-width:1100px; margin:0 auto;">
+    <h2 data-reveal="" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,4.6vw,46px); color:#7f9fce; margin:0 0 40px; text-align:center;">Little things we’ve made</h2>
+    <p data-reveal="" style="text-align:center; font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(18px,2.2vw,22px); color:#8a8693; margin:-24px auto 40px; max-width:560px;">Chunky plush frogs, bunnies, ducks &amp; more, which are all handmade by our members.</p>
+    <div style="display:flex; gap:28px; justify-content:center; align-items:flex-start; flex-wrap:wrap;">
+      <div data-reveal="" data-reveal-delay="0" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.6); transform:rotate(-3deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.7);">
+        <img src="assets/make-frog1.jpeg" alt="Mint green chunky crochet frog" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#7a7684; text-align:center; margin-top:14px; font-style:italic;">minty frog</div>
+      </div>
+      <div data-reveal="" data-reveal-delay="90" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(2.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+        <img src="assets/make-bunny2.jpeg" alt="Pink floppy-eared crochet bunny" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#c99daa; text-align:center; margin-top:14px; font-style:italic;">floppy bunny</div>
+      </div>
+      <div data-reveal="" data-reveal-delay="180" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(-1.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+        <img src="assets/make-duck.jpeg" alt="Little white crochet duck with orange beak" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#7a7684; text-align:center; margin-top:14px; font-style:italic;">little duck</div>
+      </div>
+      <div data-reveal="" data-reveal-delay="0" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(3deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+        <img src="assets/make-bunny1.jpeg" alt="Peach chunky crochet bunny" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#c99daa; text-align:center; margin-top:14px; font-style:italic;">peach bunny</div>
+      </div>
+      <div data-reveal="" data-reveal-delay="90" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(-2deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+        <img src="assets/make-octopus.jpeg" alt="Tiny cream crochet octopus" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#7a7684; text-align:center; margin-top:14px; font-style:italic;">tiny octopus</div>
+      </div>
+      <div data-reveal="" data-reveal-delay="180" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(1.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+        <img src="assets/make-frog2.jpeg" alt="Mint crochet frog with long dangly legs" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#c99daa; text-align:center; margin-top:14px; font-style:italic;">long-legged frog</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EVENTS ===== -->
+  <section id="events" style="padding:70px 6vw 30px; max-width:1100px; margin:0 auto;">
+    <h2 data-reveal="" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,4.6vw,46px); color:#dc9aad; margin:0 0 12px; text-align:center;">Where you’ll find us</h2>
+    <p data-reveal="" style="text-align:center; font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(18px,2.2vw,22px); color:#8a8693; margin:0 auto 44px; max-width:600px;">Beyond our Friday meetings, we love bringing our makes out into the community.</p>
+    <div data-reveal="" style="display:flex; gap:36px; align-items:center; flex-wrap:wrap; justify-content:center; background:#fff; border-radius:26px; padding:clamp(24px,3vw,36px); box-shadow:0 24px 54px -30px rgba(120,110,140,.55);">
+      <div style="position:relative; flex:1 1 300px; min-width:280px;">
+        <img src="assets/event-founders.jpeg" alt="Wayzata Crochet Club members at their Asian Fair booth" style="width:100%; height:300px; object-fit:cover; border-radius:18px;">
+        <img src="assets/event-wheel.jpeg" alt="A member running the prize wheel at the Asian Fair" style="position: absolute; right: -14px; bottom: -24px; width: 205px; height: 145px; object-fit: cover; border-radius: 16px; border: 5px solid #fff; box-shadow: 0 14px 30px -14px rgba(120,110,140,.7)">
+      </div>
+      <div style="flex:1 1 320px; min-width:280px;">
+        <div style="display:inline-block; font-family:'EB Garamond',serif; letter-spacing:.18em; text-transform:uppercase; font-size:13px; color:#8faed8; margin-bottom:12px;">Recent event</div>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(28px,3.6vw,36px); color:#463f44; margin:0 0 16px;">Asian Fair</h3>
+        <p style="font-size:clamp(18px,2.2vw,21px); line-height:1.65; color:#6a636a; margin:0;">We set up a booth at the Asian Fair with a table full of handmade plushies and a spin-the-wheel prize game. It was such a joy sharing our makes, meeting the community, and seeing everyone’s favorites find new homes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DONATE ===== -->
+  <section id="donate" style="padding:70px 6vw 20px; max-width:1000px; margin:0 auto;">
+    <div data-reveal="" style="position:relative; overflow:hidden; background:radial-gradient(80% 130% at 15% 10%, rgba(234,184,198,.4), transparent 65%), #f4e7ec; border-radius:26px; padding:clamp(40px,5vw,64px); text-align:center;">
+      <div style="position:absolute; top:14%; right:8%; font-size:30px; color:rgba(220,154,173,.55); animation:wcc-drift 11s ease-in-out infinite;">♡</div>
+      <div style="position:absolute; bottom:16%; left:10%; font-size:20px; color:rgba(143,174,216,.5); animation:wcc-drift 13s ease-in-out infinite .7s;">♡</div>
+      <div style="position:relative;">
+        <div style="display:inline-block; font-family:'EB Garamond',serif; letter-spacing:.2em; text-transform:uppercase; font-size:14px; color:#c7889b; margin-bottom:16px;">Give back</div>
+        <h2 style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(30px,4.4vw,46px); line-height:1.2; color:#8a5c6c; margin:0 0 20px;">Interested in making volunteer hours?</h2>
+        <p style="font-size:clamp(19px,2.4vw,23px); line-height:1.6; color:#6a636a; margin:0 auto 34px; max-width:600px;">Donate your crochet items to local hospitals for hours! Reach out if you’re interested. We’ll help you get started.</p>
+        <a href="#contact" style="display:inline-block; text-decoration:none; padding:15px 40px; background:#8a5c6c; color:#fff; border-radius:28px; font-size:20px; box-shadow:0 14px 30px -14px rgba(138,92,108,.8); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-3px) scale(1.03); box-shadow:0 20px 40px -14px rgba(138,92,108,.9);">Contact us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOUNDERS + CTA ===== -->
+  <section id="join" style="position:relative; margin-top:70px; background:radial-gradient(70% 120% at 50% 0%, rgba(234,184,198,.32), transparent 70%), linear-gradient(135deg,#dce6f5,#f3dde5); padding:clamp(60px,8vw,96px) 6vw; text-align:center; overflow:hidden;">
+    <div style="position:absolute; top:12%; left:9%; width:30px; height:30px; border-radius:50%; background:rgba(143,174,216,.35); animation:wcc-drift 12s ease-in-out infinite;"></div>
+    <div style="position:absolute; bottom:16%; right:11%; font-size:30px; color:rgba(220,154,173,.6); animation:wcc-drift 10s ease-in-out infinite .8s;">♡</div>
+    <div data-reveal="" style="position:relative;">
+      <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(20px,2.6vw,24px); color:#7a7684; margin:0 0 8px;">Founded by</p>
+      <p style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(28px,4vw,38px); color:#5c6b8f; margin:0 0 52px;">Phoebe Zheng &amp; Jiliene Mercado</p>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(38px,5.5vw,52px); color:#413c46; margin:0 0 14px;">Ready to join us?</h2>
+      <p style="font-size:clamp(18px,2.4vw,22px); color:#6f6b78; margin:0 0 34px;">Grab a hook, we’d love to have you.</p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeapajd5PmRiYPodhVnvtZWv3Sre4OevU34SZkHv-36kH6KWA/viewform" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; padding:16px 44px; background:#8faed8; color:#fff; border-radius:30px; font-size:21px; box-shadow:0 16px 34px -12px rgba(143,174,216,1); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-3px) scale(1.03); box-shadow:0 22px 44px -12px rgba(143,174,216,1);">Sign up sheet</a>
+      <div style="margin-top:40px; font-size:18px; color:#8a8693;">Find us on Instagram · <a href="https://instagram.com/wayzatacrochet" target="_blank" rel="noopener" class="wcc-link" style="color:#dc9aad; text-decoration:none;">@wayzatacrochet</a></div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" style="padding:clamp(60px,8vw,88px) 6vw; max-width:900px; margin:0 auto; text-align:center;">
+    <h2 data-reveal="" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,4.6vw,46px); color:#7f9fce; margin:0 0 12px;">Get in touch</h2>
+    <p data-reveal="" style="font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(18px,2.2vw,22px); color:#8a8693; margin:0 auto 40px; max-width:520px;">Questions about joining, events, or a custom make? We’d love to hear from you.</p>
+    <div data-reveal="" style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
+      <div onClick="{{ copyEmail }}" title="Click to copy" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; background:#fff; border-radius:22px; padding:30px 40px; min-width:240px; box-shadow:0 18px 40px -26px rgba(120,110,140,.6); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-4px); box-shadow:0 26px 50px -26px rgba(120,110,140,.7);">
+        <span style="font-family:'EB Garamond',serif; letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:#dc9aad;">Email</span>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:clamp(20px,2.4vw,24px); color:#463f44;">wayzatacrochetclub@gmail.com</span>
+        <span style="font-family:'EB Garamond',serif; font-size:13px; color:#b0a9b0;">tap to copy</span>
+      </div>
+      <a href="https://instagram.com/wayzatacrochet" target="_blank" rel="noopener" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; gap:8px; background:#fff; border-radius:22px; padding:30px 40px; min-width:240px; box-shadow:0 18px 40px -26px rgba(120,110,140,.6); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-4px); box-shadow:0 26px 50px -26px rgba(120,110,140,.7);">
+        <span style="font-family:'EB Garamond',serif; letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:#8faed8;">Instagram</span>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:clamp(20px,2.4vw,24px); color:#463f44;">@wayzatacrochet</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="background:#463f44; color:#e8e0e4; text-align:center; padding:44px 6vw;">
+    <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:14px;">
+      <img src="assets/logo.png" alt="" style="width:38px; height:38px; border-radius:50%; object-fit:cover;">
+      <span style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:21px;">Wayzata Crochet Club</span>
+    </div>
+    <div style="font-size:16px; color:#b6acb2; line-height:1.7;">Most Fridays · 3:30–4:30 PM · Room C406<br><a href="mailto:wayzatacrochetclub@gmail.com" style="color:#eab8c6; text-decoration:none;">wayzatacrochetclub@gmail.com</a> &nbsp;·&nbsp; <a href="https://instagram.com/wayzatacrochet" target="_blank" rel="noopener" style="color:#eab8c6; text-decoration:none;">@wayzatacrochet</a></div>
+  </footer>
+
+  <!-- ===== TOAST ===== -->
+  <div ref="{{ toast }}" style="position:fixed; left:50%; bottom:36px; transform:translate(-50%,20px); z-index:100; background:#463f44; color:#fff; font-family:'EB Garamond',serif; font-size:17px; padding:14px 26px; border-radius:30px; box-shadow:0 16px 36px -12px rgba(60,50,70,.6); opacity:0; pointer-events:none; transition:opacity .3s ease, transform .3s ease; display:flex; align-items:center; gap:10px;">
+    <span style="color:#8fd8a8; font-size:18px;">✓</span><span ref="{{ toastText }}">Email copied!</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = this.refs.root;
+    if (!root) return;
+
+    // ---- Scroll reveal ----
+    const revealables = root.querySelectorAll('[data-reveal]');
+    revealables.forEach(el => {
+      const delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(40px)';
+      el.style.transition = `opacity .8s cubic-bezier(.2,.7,.2,1) ${delay}ms, transform .8s cubic-bezier(.2,.7,.2,1) ${delay}ms`;
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealables.forEach(el => io.observe(el));
+    this._io = io;
+
+    // ---- Nav: transparent over hero, solid after scroll + hero parallax ----
+    const { nav, navname, navlinks, navlogo, heroimg } = this.refs;
+    const onScroll = () => {
+      const y = window.scrollY || window.pageYOffset;
+      if (heroimg) heroimg.style.transform = `translateY(${y * 0.28}px) scale(1.02)`;
+      const solid = y > 60;
+      if (nav) {
+        nav.style.background = solid ? 'rgba(253,249,247,.92)' : 'transparent';
+        nav.style.boxShadow = solid ? '0 8px 26px -18px rgba(120,110,140,.6)' : 'none';
+        nav.style.backdropFilter = solid ? 'blur(8px)' : 'none';
+        nav.style.padding = solid ? '12px 6vw' : '18px 6vw';
+      }
+      const txt = solid ? '#5c6b8f' : '#fff';
+      if (navname) navname.style.color = txt;
+      if (navlinks) navlinks.style.color = txt;
+      if (navlogo) navlogo.style.borderColor = solid ? 'rgba(143,174,216,.5)' : 'rgba(255,255,255,.7)';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    this._onScroll = onScroll;
+  }
+
+  componentWillUnmount() {
+    if (this._io) this._io.disconnect();
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    clearTimeout(this._toastTimer);
+  }
+
+  showToast(msg) {
+    const t = this.refs.toast, tx = this.refs.toastText;
+    if (!t) return;
+    if (tx) tx.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translate(-50%,0)';
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translate(-50%,20px)';
+    }, 2200);
+  }
+
+  fallbackCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    if (cb) cb();
+  }
+
+  renderVals() {
+    return {
+      root: (el) => { this.refs = this.refs || {}; this.refs.root = el; },
+      nav: (el) => { this.refs = this.refs || {}; this.refs.nav = el; },
+      navname: (el) => { this.refs = this.refs || {}; this.refs.navname = el; },
+      navlinks: (el) => { this.refs = this.refs || {}; this.refs.navlinks = el; },
+      navlogo: (el) => { this.refs = this.refs || {}; this.refs.navlogo = el; },
+      heroimg: (el) => { this.refs = this.refs || {}; this.refs.heroimg = el; },
+      toast: (el) => { this.refs = this.refs || {}; this.refs.toast = el; },
+      toastText: (el) => { this.refs = this.refs || {}; this.refs.toastText = el; },
+      copyEmail: () => {
+        const email = 'wayzatacrochetclub@gmail.com';
+        const done = () => this.showToast('Email copied to clipboard!');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(done).catch(() => this.fallbackCopy(email, done));
+        } else {
+          this.fallbackCopy(email, done);
+        }
+      },
+      p1: () => {},
+    };
+  }
+}
+</script>
+</body>
+</html>
