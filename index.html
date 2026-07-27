@@ -13,8 +13,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: #fdf9f7; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #fdf9f7; overflow-x: hidden; }
+  img, svg { max-width: 100%; }
+  section, header { scroll-margin-top: 78px; }
+  a, button { -webkit-tap-highlight-color: rgba(143,174,216,.25); }
   @keyframes wcc-float   { 0%,100% { transform: translateY(0) rotate(var(--r,0deg)); } 50% { transform: translateY(-16px) rotate(var(--r,0deg)); } }
   @keyframes wcc-drift   { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(14px,-22px) rotate(18deg); } 100% { transform: translate(0,0) rotate(0deg); } }
   @keyframes wcc-wobble  { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
@@ -26,18 +29,86 @@
   .wcc-link { position:relative; }
   .wcc-link::after { content:""; position:absolute; left:0; right:100%; bottom:-4px; height:2px; background:currentColor; transition:right .3s ease; }
   .wcc-link:hover::after { right:0; }
+
+  /* ===== Mobile nav: hamburger + sheet ===== */
+  .wcc-burger { display:none; align-items:center; justify-content:center; width:46px; height:46px; padding:0; margin:0; border:none; background:transparent; cursor:pointer; flex-direction:column; gap:6px; }
+  .wcc-burger span { display:block; width:26px; height:2px; border-radius:2px; background:currentColor; transition:transform .3s ease, opacity .2s ease; }
+  .wcc-burger[aria-expanded="true"] span:nth-child(1) { transform:translateY(8px) rotate(45deg); }
+  .wcc-burger[aria-expanded="true"] span:nth-child(2) { opacity:0; }
+  .wcc-burger[aria-expanded="true"] span:nth-child(3) { transform:translateY(-8px) rotate(-45deg); }
+  .wcc-sheet { display:none; }
+  .wcc-sheet-backdrop { display:none; }
+
+  @media (max-width: 880px) {
+    .wcc-navlinks { display:none !important; }
+    .wcc-burger { display:flex; }
+
+    .wcc-sheet {
+      display:block; position:fixed; z-index:60; top:0; left:0; right:0;
+      background:#fdf9f7; padding:84px 6vw 30px;
+      box-shadow:0 18px 40px -22px rgba(120,110,140,.75);
+      border-radius:0 0 26px 26px;
+      transform:translateY(-102%); transition:transform .38s cubic-bezier(.3,.7,.3,1);
+      max-height:100vh; overflow-y:auto;
+    }
+    .wcc-sheet.wcc-open { transform:translateY(0); }
+    .wcc-sheet a {
+      display:block; padding:14px 4px; font-size:20px; color:#5c6b8f;
+      text-decoration:none; border-bottom:1px solid rgba(143,174,216,.22);
+    }
+    .wcc-sheet a:last-child {
+      border-bottom:none; margin-top:20px; text-align:center;
+      background:#8faed8; color:#fff; border-radius:26px; padding:14px 24px;
+    }
+    .wcc-sheet-backdrop {
+      display:block; position:fixed; inset:0; z-index:55; background:rgba(70,63,68,.42);
+      opacity:0; pointer-events:none; transition:opacity .3s ease;
+    }
+    .wcc-sheet-backdrop.wcc-open { opacity:1; pointer-events:auto; }
+  }
+
+  /* ===== Tablet / phone layout ===== */
+  @media (max-width: 880px) {
+    .wcc-nav { padding:14px 5vw !important; }
+    .wcc-eventfloat { position:static !important; width:100% !important; height:180px !important; margin-top:14px; border-width:0 !important; box-shadow:none !important; }
+  }
+
+  @media (max-width: 640px) {
+    .wcc-hero { height:100svh !important; min-height:520px !important; }
+    .wcc-herologo { width:104px !important; height:104px !important; }
+    .wcc-hero-cta a { width:100%; text-align:center; }
+    .wcc-hero-scroll { bottom:34px !important; }
+
+    .wcc-meet { padding:26px 22px !important; }
+    .wcc-make { width:100% !important; max-width:290px; }
+    .wcc-make img { height:210px !important; }
+    .wcc-card { min-width:0 !important; width:100% !important; padding:26px 18px !important; }
+    .wcc-card span { overflow-wrap:anywhere; }
+    .wcc-eventmedia img:first-child { height:230px !important; }
+    .wcc-toast { max-width:calc(100vw - 32px) !important; justify-content:center; text-align:center; }
+  }
+
+  @media (max-width: 400px) {
+    .wcc-navname { font-size:19px !important; }
+    .wcc-navlogo { width:38px !important; height:38px !important; }
+  }
+
+  /* Touch devices: no sticky hover lift */
+  @media (hover: none) {
+    .wcc-link::after { display:none; }
+  }
 </style>
 </helmet>
 
 <div ref="{{ root }}" style="font-family:'EB Garamond', Georgia, serif; color:#463f44; overflow-x:hidden;">
 
   <!-- ===== NAV ===== -->
-  <nav ref="{{ nav }}" style="position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:18px 6vw; transition:background .4s ease, box-shadow .4s ease, padding .4s ease; animation:wcc-fadedn .8s ease both;">
-    <a href="#top" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
-      <img ref="{{ navlogo }}" src="assets/logo.png" alt="" style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.7); transition:border-color .4s ease, box-shadow .4s ease;">
-      <span ref="{{ navname }}" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:22px; letter-spacing:.02em; color:#fff; transition:color .4s ease;">Wayzata Crochet</span>
+  <nav ref="{{ nav }}" class="wcc-nav" style="position:fixed; top:0; left:0; right:0; z-index:70; display:flex; align-items:center; justify-content:space-between; padding:18px 6vw; transition:background .4s ease, box-shadow .4s ease, padding .4s ease; animation:wcc-fadedn .8s ease both;">
+    <a href="#top" onClick="{{ closeMenu }}" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
+      <img ref="{{ navlogo }}" class="wcc-navlogo" src="assets/logo.png" alt="" style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.7); transition:border-color .4s ease, box-shadow .4s ease;">
+      <span ref="{{ navname }}" class="wcc-navname" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:22px; letter-spacing:.02em; color:#fff; transition:color .4s ease;">Wayzata Crochet</span>
     </a>
-    <div ref="{{ navlinks }}" style="display:flex; align-items:center; gap:30px; font-size:18px; color:#fff; transition:color .4s ease;">
+    <div ref="{{ navlinks }}" class="wcc-navlinks" style="display:flex; align-items:center; gap:30px; font-size:18px; color:#fff; transition:color .4s ease;">
       <a href="#about" class="wcc-link" style="color:inherit; text-decoration:none;">About</a>
       <a href="#makes" class="wcc-link" style="color:inherit; text-decoration:none;">Our makes</a>
       <a href="#events" class="wcc-link" style="color:inherit; text-decoration:none;">Events</a>
@@ -45,10 +116,24 @@
       <a href="#contact" class="wcc-link" style="color:inherit; text-decoration:none;">Contact</a>
       <a href="#join" style="text-decoration:none; padding:9px 24px; background:#8faed8; color:#fff; border-radius:22px; font-size:17px; box-shadow:0 8px 20px -8px rgba(143,174,216,.9); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-2px); box-shadow:0 12px 26px -8px rgba(143,174,216,1);">Join us</a>
     </div>
+    <button ref="{{ burger }}" onClick="{{ toggleMenu }}" class="wcc-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="wcc-mobile-menu" style="color:#fff; transition:color .4s ease;">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
+  <!-- ===== MOBILE MENU ===== -->
+  <div ref="{{ backdrop }}" onClick="{{ closeMenu }}" class="wcc-sheet-backdrop" aria-hidden="true"></div>
+  <div ref="{{ sheet }}" id="wcc-mobile-menu" class="wcc-sheet" style="font-family:'EB Garamond',serif;">
+    <a href="#about" onClick="{{ closeMenu }}">About</a>
+    <a href="#makes" onClick="{{ closeMenu }}">Our makes</a>
+    <a href="#events" onClick="{{ closeMenu }}">Events</a>
+    <a href="#donate" onClick="{{ closeMenu }}">Donate</a>
+    <a href="#contact" onClick="{{ closeMenu }}">Contact</a>
+    <a href="#join" onClick="{{ closeMenu }}">Join us</a>
+  </div>
+
   <!-- ===== HERO ===== -->
-  <header id="top" style="position:relative; height:100vh; min-height:640px; overflow:hidden;">
+  <header id="top" class="wcc-hero" style="position:relative; height:100vh; min-height:640px; overflow:hidden;">
     <img ref="{{ heroimg }}" src="assets/plushies.jpeg" alt="A table full of handmade crochet plushies" style="position:absolute; top:-6%; left:0; width:100%; height:118%; object-fit:cover; will-change:transform;">
     <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(122,144,190,.5) 0%, rgba(150,140,175,.34) 42%, rgba(70,63,68,.72) 100%);"></div>
 
@@ -59,7 +144,7 @@
     <div style="position:absolute; top:24%; right:26%; width:18px; height:18px; border-radius:50%; background:rgba(143,174,216,.5); animation:wcc-float 7s ease-in-out infinite;"></div>
 
     <div style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 6vw;">
-      <img src="assets/logo.png" alt="Wayzata Crochet Club logo" style="width:150px; height:150px; border-radius:50%; object-fit:cover; box-shadow:0 22px 50px -18px rgba(60,50,80,.7); animation:wcc-float 6s ease-in-out infinite, wcc-fadedn 1s ease both;">
+      <img class="wcc-herologo" src="assets/logo.png" alt="Wayzata Crochet Club logo" style="width:150px; height:150px; border-radius:50%; object-fit:cover; box-shadow:0 22px 50px -18px rgba(60,50,80,.7); animation:wcc-float 6s ease-in-out infinite, wcc-fadedn 1s ease both;">
       <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:clamp(48px,8vw,104px); line-height:.96; color:#fff; margin:26px 0 0; text-shadow:0 6px 30px rgba(60,50,70,.45);">
         <span class="wcc-hero-word" style="animation-delay:.15s;">Wayzata</span>
         <span style="display:block;">
@@ -68,13 +153,13 @@
         </span>
       </h1>
       <p style="font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(19px,2.4vw,26px); color:#fbeef2; margin:24px 0 0; max-width:560px; line-height:1.45; text-shadow:0 2px 14px rgba(60,50,70,.5); animation:wcc-fadedn 1s ease .5s both;">Handmade, cozy, and low-stress for crocheters of every level.</p>
-      <div style="display:flex; gap:16px; margin-top:38px; flex-wrap:wrap; justify-content:center; animation:wcc-fadedn 1s ease .7s both;">
+      <div class="wcc-hero-cta" style="display:flex; gap:16px; margin-top:38px; flex-wrap:wrap; justify-content:center; animation:wcc-fadedn 1s ease .7s both;">
         <a href="#join" style="text-decoration:none; padding:15px 38px; background:#fff; color:#7f9fce; border-radius:28px; font-size:20px; font-weight:500; box-shadow:0 14px 30px -12px rgba(60,50,80,.5); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-3px) scale(1.02); box-shadow:0 20px 38px -12px rgba(60,50,80,.6);">Join the club</a>
         <a href="#makes" style="text-decoration:none; padding:15px 34px; background:rgba(255,255,255,.16); color:#fff; border:1.5px solid rgba(255,255,255,.6); border-radius:28px; font-size:20px; backdrop-filter:blur(4px); transition:background .25s ease;" style-hover="background:rgba(255,255,255,.28);">See our makes</a>
       </div>
     </div>
 
-    <div style="position:absolute; bottom:70px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,.85); font-size:26px; animation:wcc-bounce 1.8s ease-in-out infinite;">⌄</div>
+    <div class="wcc-hero-scroll" style="position:absolute; bottom:70px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,.85); font-size:26px; animation:wcc-bounce 1.8s ease-in-out infinite;">⌄</div>
     <svg viewBox="0 0 1440 70" preserveAspectRatio="none" style="position:absolute; bottom:-1px; left:0; width:100%; height:70px; display:block;"><path d="M0,45 C240,12 480,62 720,40 C960,18 1200,58 1440,32 L1440,70 L0,70 Z" fill="#fdf9f7"></path></svg>
   </header>
 
@@ -89,7 +174,7 @@
 
   <!-- ===== MEETING ===== -->
   <section style="display:flex; justify-content:center; padding:54px 6vw 30px;">
-    <div data-reveal="" style="position:relative; background:#f4e7ec; border:1.5px dashed #e0b3c1; border-radius:22px; padding:30px 52px; text-align:center; animation:wcc-wobble 6s ease-in-out infinite;">
+    <div data-reveal="" class="wcc-meet" style="position:relative; background:#f4e7ec; border:1.5px dashed #e0b3c1; border-radius:22px; padding:30px 52px; text-align:center; animation:wcc-wobble 6s ease-in-out infinite;">
       <div style="font-family:'EB Garamond',serif; letter-spacing:.18em; text-transform:uppercase; font-size:13px; color:#c7889b; margin-bottom:10px;">When we meet</div>
       <div style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(26px,3.4vw,34px); color:#8a5c6c;">Most Fridays after school</div>
       <div style="font-size:clamp(18px,2.2vw,21px); color:#a07886; margin-top:6px;">3:30 – 4:30 PM &nbsp;·&nbsp; Room C406</div>
@@ -101,27 +186,27 @@
     <h2 data-reveal="" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,4.6vw,46px); color:#7f9fce; margin:0 0 40px; text-align:center;">Little things we’ve made</h2>
     <p data-reveal="" style="text-align:center; font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(18px,2.2vw,22px); color:#8a8693; margin:-24px auto 40px; max-width:560px;">Chunky plush frogs, bunnies, ducks &amp; more, which are all handmade by our members.</p>
     <div style="display:flex; gap:28px; justify-content:center; align-items:flex-start; flex-wrap:wrap;">
-      <div data-reveal="" data-reveal-delay="0" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.6); transform:rotate(-3deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.7);">
+      <div class="wcc-make" data-reveal="" data-reveal-delay="0" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.6); transform:rotate(-3deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.7);">
         <img src="assets/make-frog1.jpeg" alt="Mint green chunky crochet frog" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
         <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#7a7684; text-align:center; margin-top:14px; font-style:italic;">minty frog</div>
       </div>
-      <div data-reveal="" data-reveal-delay="90" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(2.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+      <div class="wcc-make" data-reveal="" data-reveal-delay="90" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(2.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
         <img src="assets/make-bunny2.jpeg" alt="Pink floppy-eared crochet bunny" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
         <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#c99daa; text-align:center; margin-top:14px; font-style:italic;">floppy bunny</div>
       </div>
-      <div data-reveal="" data-reveal-delay="180" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(-1.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+      <div class="wcc-make" data-reveal="" data-reveal-delay="180" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(-1.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
         <img src="assets/make-duck.jpeg" alt="Little white crochet duck with orange beak" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
         <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#7a7684; text-align:center; margin-top:14px; font-style:italic;">little duck</div>
       </div>
-      <div data-reveal="" data-reveal-delay="0" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(3deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+      <div class="wcc-make" data-reveal="" data-reveal-delay="0" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(3deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
         <img src="assets/make-bunny1.jpeg" alt="Peach chunky crochet bunny" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
         <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#c99daa; text-align:center; margin-top:14px; font-style:italic;">peach bunny</div>
       </div>
-      <div data-reveal="" data-reveal-delay="90" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(-2deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+      <div class="wcc-make" data-reveal="" data-reveal-delay="90" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(-2deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
         <img src="assets/make-octopus.jpeg" alt="Tiny cream crochet octopus" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
         <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#7a7684; text-align:center; margin-top:14px; font-style:italic;">tiny octopus</div>
       </div>
-      <div data-reveal="" data-reveal-delay="180" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(1.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
+      <div class="wcc-make" data-reveal="" data-reveal-delay="180" style="background:#fff; padding:14px 14px 42px; border-radius:8px; box-shadow:0 16px 34px -20px rgba(120,110,140,.5); transform:rotate(1.5deg); width:250px; transition:transform .35s ease, box-shadow .35s ease;" style-hover="transform:rotate(0deg) translateY(-8px) scale(1.03); box-shadow:0 26px 48px -20px rgba(120,110,140,.6);">
         <img src="assets/make-frog2.jpeg" alt="Mint crochet frog with long dangly legs" style="width:100%; height:230px; object-fit:cover; border-radius:4px;">
         <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#c99daa; text-align:center; margin-top:14px; font-style:italic;">long-legged frog</div>
       </div>
@@ -133,11 +218,11 @@
     <h2 data-reveal="" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,4.6vw,46px); color:#dc9aad; margin:0 0 12px; text-align:center;">Where you’ll find us</h2>
     <p data-reveal="" style="text-align:center; font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(18px,2.2vw,22px); color:#8a8693; margin:0 auto 44px; max-width:600px;">Beyond our Friday meetings, we love bringing our makes out into the community.</p>
     <div data-reveal="" style="display:flex; gap:36px; align-items:center; flex-wrap:wrap; justify-content:center; background:#fff; border-radius:26px; padding:clamp(24px,3vw,36px); box-shadow:0 24px 54px -30px rgba(120,110,140,.55);">
-      <div style="position:relative; flex:1 1 300px; min-width:280px;">
+      <div class="wcc-eventmedia" style="position:relative; flex:1 1 300px; min-width:min(280px, 100%);">
         <img src="assets/event-founders.jpeg" alt="Wayzata Crochet Club members at their Asian Fair booth" style="width:100%; height:300px; object-fit:cover; border-radius:18px;">
-        <img src="assets/event-wheel.jpeg" alt="A member running the prize wheel at the Asian Fair" style="position: absolute; right: -14px; bottom: -24px; width: 205px; height: 145px; object-fit: cover; border-radius: 16px; border: 5px solid #fff; box-shadow: 0 14px 30px -14px rgba(120,110,140,.7)">
+        <img class="wcc-eventfloat" src="assets/event-wheel.jpeg" alt="A member running the prize wheel at the Asian Fair" style="position: absolute; right: -14px; bottom: -24px; width: 205px; height: 145px; object-fit: cover; border-radius: 16px; border: 5px solid #fff; box-shadow: 0 14px 30px -14px rgba(120,110,140,.7)">
       </div>
-      <div style="flex:1 1 320px; min-width:280px;">
+      <div style="flex:1 1 320px; min-width:min(280px, 100%);">
         <div style="display:inline-block; font-family:'EB Garamond',serif; letter-spacing:.18em; text-transform:uppercase; font-size:13px; color:#8faed8; margin-bottom:12px;">Recent event</div>
         <h3 style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(28px,3.6vw,36px); color:#463f44; margin:0 0 16px;">Asian Fair</h3>
         <p style="font-size:clamp(18px,2.2vw,21px); line-height:1.65; color:#6a636a; margin:0;">We set up a booth at the Asian Fair with a table full of handmade plushies and a spin-the-wheel prize game. It was such a joy sharing our makes, meeting the community, and seeing everyone’s favorites find new homes.</p>
@@ -178,12 +263,12 @@
     <h2 data-reveal="" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(34px,4.6vw,46px); color:#7f9fce; margin:0 0 12px;">Get in touch</h2>
     <p data-reveal="" style="font-family:'EB Garamond',serif; font-style:italic; font-size:clamp(18px,2.2vw,22px); color:#8a8693; margin:0 auto 40px; max-width:520px;">Questions about joining, events, or a custom make? We’d love to hear from you.</p>
     <div data-reveal="" style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
-      <div onClick="{{ copyEmail }}" title="Click to copy" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; background:#fff; border-radius:22px; padding:30px 40px; min-width:240px; box-shadow:0 18px 40px -26px rgba(120,110,140,.6); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-4px); box-shadow:0 26px 50px -26px rgba(120,110,140,.7);">
+      <div onClick="{{ copyEmail }}" class="wcc-card" title="Click to copy" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; background:#fff; border-radius:22px; padding:30px 40px; min-width:240px; box-shadow:0 18px 40px -26px rgba(120,110,140,.6); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-4px); box-shadow:0 26px 50px -26px rgba(120,110,140,.7);">
         <span style="font-family:'EB Garamond',serif; letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:#dc9aad;">Email</span>
         <span style="font-family:'Cormorant Garamond',serif; font-size:clamp(20px,2.4vw,24px); color:#463f44;">wayzatacrochetclub@gmail.com</span>
         <span style="font-family:'EB Garamond',serif; font-size:13px; color:#b0a9b0;">tap to copy</span>
       </div>
-      <a href="https://instagram.com/wayzatacrochet" target="_blank" rel="noopener" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; gap:8px; background:#fff; border-radius:22px; padding:30px 40px; min-width:240px; box-shadow:0 18px 40px -26px rgba(120,110,140,.6); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-4px); box-shadow:0 26px 50px -26px rgba(120,110,140,.7);">
+      <a href="https://instagram.com/wayzatacrochet" target="_blank" rel="noopener" class="wcc-card" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; gap:8px; background:#fff; border-radius:22px; padding:30px 40px; min-width:240px; box-shadow:0 18px 40px -26px rgba(120,110,140,.6); transition:transform .25s ease, box-shadow .25s ease;" style-hover="transform:translateY(-4px); box-shadow:0 26px 50px -26px rgba(120,110,140,.7);">
         <span style="font-family:'EB Garamond',serif; letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:#8faed8;">Instagram</span>
         <span style="font-family:'Cormorant Garamond',serif; font-size:clamp(20px,2.4vw,24px); color:#463f44;">@wayzatacrochet</span>
       </a>
@@ -200,7 +285,7 @@
   </footer>
 
   <!-- ===== TOAST ===== -->
-  <div ref="{{ toast }}" style="position:fixed; left:50%; bottom:36px; transform:translate(-50%,20px); z-index:100; background:#463f44; color:#fff; font-family:'EB Garamond',serif; font-size:17px; padding:14px 26px; border-radius:30px; box-shadow:0 16px 36px -12px rgba(60,50,70,.6); opacity:0; pointer-events:none; transition:opacity .3s ease, transform .3s ease; display:flex; align-items:center; gap:10px;">
+  <div ref="{{ toast }}" class="wcc-toast" style="position:fixed; left:50%; bottom:36px; transform:translate(-50%,20px); z-index:100; background:#463f44; color:#fff; font-family:'EB Garamond',serif; font-size:17px; padding:14px 26px; border-radius:30px; box-shadow:0 16px 36px -12px rgba(60,50,70,.6); opacity:0; pointer-events:none; transition:opacity .3s ease, transform .3s ease; display:flex; align-items:center; gap:10px;">
     <span style="color:#8fd8a8; font-size:18px;">✓</span><span ref="{{ toastText }}">Email copied!</span>
   </div>
 
@@ -233,11 +318,18 @@ class Component extends DCLogic {
     this._io = io;
 
     // ---- Nav: transparent over hero, solid after scroll + hero parallax ----
-    const { nav, navname, navlinks, navlogo, heroimg } = this.refs;
+    const { nav, navname, navlinks, navlogo, heroimg, burger } = this.refs;
+    // Parallax is expensive on phones and fights momentum scrolling — desktop only.
+    const wantsParallax = window.matchMedia('(min-width: 881px)').matches
+      && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const onScroll = () => {
       const y = window.scrollY || window.pageYOffset;
-      if (heroimg) heroimg.style.transform = `translateY(${y * 0.28}px) scale(1.02)`;
-      const solid = y > 60;
+      if (heroimg) {
+        heroimg.style.transform = wantsParallax
+          ? `translateY(${y * 0.28}px) scale(1.02)`
+          : 'none';
+      }
+      const solid = y > 60 || this._menuOpen;
       if (nav) {
         nav.style.background = solid ? 'rgba(253,249,247,.92)' : 'transparent';
         nav.style.boxShadow = solid ? '0 8px 26px -18px rgba(120,110,140,.6)' : 'none';
@@ -247,17 +339,45 @@ class Component extends DCLogic {
       const txt = solid ? '#5c6b8f' : '#fff';
       if (navname) navname.style.color = txt;
       if (navlinks) navlinks.style.color = txt;
+      if (burger) burger.style.color = txt;
       if (navlogo) navlogo.style.borderColor = solid ? 'rgba(143,174,216,.5)' : 'rgba(255,255,255,.7)';
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     this._onScroll = onScroll;
+
+    // ---- Close the mobile menu when the viewport grows back to desktop ----
+    const onResize = () => { if (window.innerWidth > 880) this.setMenu(false); };
+    window.addEventListener('resize', onResize);
+    this._onResize = onResize;
+
+    // ---- Escape closes the mobile menu ----
+    const onKey = (e) => { if (e.key === 'Escape') this.setMenu(false); };
+    document.addEventListener('keydown', onKey);
+    this._onKey = onKey;
   }
 
   componentWillUnmount() {
     if (this._io) this._io.disconnect();
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._onKey) document.removeEventListener('keydown', this._onKey);
+    document.body.style.overflow = '';
     clearTimeout(this._toastTimer);
+  }
+
+  setMenu(open) {
+    const { sheet, backdrop, burger } = this.refs;
+    if (!sheet) return;
+    this._menuOpen = !!open;
+    sheet.classList.toggle('wcc-open', this._menuOpen);
+    if (backdrop) backdrop.classList.toggle('wcc-open', this._menuOpen);
+    if (burger) {
+      burger.setAttribute('aria-expanded', this._menuOpen ? 'true' : 'false');
+      burger.setAttribute('aria-label', this._menuOpen ? 'Close menu' : 'Open menu');
+    }
+    document.body.style.overflow = this._menuOpen ? 'hidden' : '';
+    if (this._onScroll) this._onScroll();
   }
 
   showToast(msg) {
@@ -293,8 +413,13 @@ class Component extends DCLogic {
       navlinks: (el) => { this.refs = this.refs || {}; this.refs.navlinks = el; },
       navlogo: (el) => { this.refs = this.refs || {}; this.refs.navlogo = el; },
       heroimg: (el) => { this.refs = this.refs || {}; this.refs.heroimg = el; },
+      burger: (el) => { this.refs = this.refs || {}; this.refs.burger = el; },
+      sheet: (el) => { this.refs = this.refs || {}; this.refs.sheet = el; },
+      backdrop: (el) => { this.refs = this.refs || {}; this.refs.backdrop = el; },
       toast: (el) => { this.refs = this.refs || {}; this.refs.toast = el; },
       toastText: (el) => { this.refs = this.refs || {}; this.refs.toastText = el; },
+      toggleMenu: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setMenu(!this._menuOpen); },
+      closeMenu: () => { this.setMenu(false); },
       copyEmail: () => {
         const email = 'wayzatacrochetclub@gmail.com';
         const done = () => this.showToast('Email copied to clipboard!');
